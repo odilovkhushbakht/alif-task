@@ -13,7 +13,11 @@ interface IRepositoryFruits {
 
 class RepositoryFruits implements IRepositoryFruits {
     
-    private $path = dirname(__FILE__);
+    private $path;
+
+    function __construct($path) {
+        $this->path = $path;
+    }
 
     public function setPath($path) {
         $this->path = $path;        

@@ -9,10 +9,20 @@ use Fruits\Fruits;
 use RepositoryFruits\IRepositoryFruits;
 use RepositoryFruits\RepositoryFruits;
 
-
-if($argv[2]){
-
+function checkNameFile() {
+    $res = false;
+    if(
+        !empty($argv[1]) and
+        isset($argv[1]) and
+        is_string($argv[1])
+    ){
+        $res = true;
+    }
+    return $res;
 }
+
+checkNameFile();
+
 switch ($argv[2]) {    
     
     case "add":        
@@ -21,7 +31,7 @@ switch ($argv[2]) {
         $name = $argv[3];
         $price = $argv[4];
 
-        $repositoryFruits = new RepositoryFruits();        
+        $repositoryFruits = new RepositoryFruits(dirname(__FILE__));        
         $d = new Fruits($repositoryFruits);
         $d->add($fileName, $name, $price);        
 

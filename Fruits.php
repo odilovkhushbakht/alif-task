@@ -22,7 +22,7 @@ class Fruits implements FruitsActions {
     
     private $repo;
 
-    public function __construct($repository) {        
+    function __construct($repository) {        
         $this->$repo = $repository;
     }
 
