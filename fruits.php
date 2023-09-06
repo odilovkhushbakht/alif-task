@@ -9,7 +9,7 @@ interface FruitsActions {
 
 class Fruits implements FruitsActions {
 
-    public __construct() {
+    function __construct() {
 
     }
 
