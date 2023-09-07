@@ -9,6 +9,15 @@ use Fruits\Fruits;
 use RepositoryFruits\IRepositoryFruits;
 use RepositoryFruits\RepositoryFruits;
 
+
+function checkParamsDeleteOption($params) {
+    return true;
+}
+
+function checkParamsChangeOption($params) {
+    return true;
+}
+
 function checkParamsAddOption($params) {
     $res = false;
     if(count($params) == 5) {
@@ -50,7 +59,9 @@ switch ($argv[2]) {
     
     case "add":
         $params = $argv;
-        checkParamsAddOption($params);
+        if(!checkParamsAddOption($params)) {
+            break;
+        }
         
         $fileName = $argv[1];
         $path = dirname(__FILE__) . "/" . $fileName . ".txt";
@@ -65,7 +76,9 @@ switch ($argv[2]) {
     
     case "change":      
         $params = $argv;  
-        checkParamsChangeOption($params);
+        if(!checkParamsChangeOption($params)) {
+            break;
+        }
         
         $fileName = $argv[1];
         $path = dirname(__FILE__) . "/" . $fileName . ".txt";
@@ -80,7 +93,18 @@ switch ($argv[2]) {
         break;
     
     case "del":
-        print_r("del\n");
+        print_r("\ndelete\n");
+        $params = $argv;  
+        checkParamsDeleteOption($params);
+        
+        $fileName = $argv[1];
+        $path = dirname(__FILE__) . "/" . $fileName . ".txt";        
+        $name = $argv[3];
+        $price = $argv[4];
+
+        $repositoryFruits = new RepositoryFruits($path);        
+        $d = new Fruits($repositoryFruits);
+        $d->delete($name, $price);
         break;
     
     default:

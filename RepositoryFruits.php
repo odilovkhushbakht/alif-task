@@ -47,6 +47,17 @@ class RepositoryFruits implements IRepositoryFruits {
     }
 
     public function delete(string $text) {
+        $res = false;
+        $contentArray = file($this->path);        
+        $eleNum = array_search($text, $contentArray, true);        
+        if($eleNum !== false){            
+            unset($contentArray[$eleNum]);   
+            $res = file_put_contents($this->path, $contentArray);
+            return $res;
+        } else {
+            echo "\nЗапись не найден.\n";
+            return $res;
+        }
     }
     
 }

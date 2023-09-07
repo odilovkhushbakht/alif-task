@@ -13,7 +13,7 @@ interface FruitsActions {
     
     public function add(string $name, float $price);
     public function change(string $oldName, float $oldPrice, string $newName, float $newPrice);
-    public function delete($name);
+    public function delete(string $name, float $price);
     public function total();
     
 }
@@ -47,8 +47,14 @@ class Fruits implements FruitsActions {
         echo "\nЗапись не изменено в файле.\n\n";
     }
 
-    public function delete($name) {
-
+    public function delete(string $name, float $price) {
+        $text = $this->textProcessing($name, $price);
+        $res = $this->$repo->delete($text);
+        if($res) {
+            echo "\nЗапись успешно удалено в файле.\n";
+            return;
+        }
+        echo "\nЗапись не удалено в файле.\n\n";
     }
 
     public function total() {
