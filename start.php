@@ -9,7 +9,31 @@ use Fruits\Fruits;
 use RepositoryFruits\IRepositoryFruits;
 use RepositoryFruits\RepositoryFruits;
 
-function checkNameFile() {
+function checkParamsAddOption($params) {
+    $res = false;
+    if(count($params) == 5) {
+        $res = true;
+    }
+    return $res;
+}
+
+function checkNameFile($fileName) {   
+    $res = false;
+    if(is_string($fileName)){        
+        $res = true;
+    }
+    return $res;
+}
+
+function checkFile($path) {
+    $res = false;    
+    if(file_exists($path)){
+        $res = true;
+    }
+    return $res;
+}
+
+function checkOldData() {
     $res = false;
     if(
         !empty($argv[1]) and
@@ -21,24 +45,38 @@ function checkNameFile() {
     return $res;
 }
 
-checkNameFile();
-
+print_r($argv);
 switch ($argv[2]) {    
     
-    case "add":        
+    case "add":
+        $params = $argv;
+        checkParamsAddOption($params);
         
         $fileName = $argv[1];
+        $path = dirname(__FILE__) . "/" . $fileName . ".txt";
         $name = $argv[3];
         $price = $argv[4];
-
-        $repositoryFruits = new RepositoryFruits(dirname(__FILE__));        
+        
+        $repositoryFruits = new RepositoryFruits($path);        
         $d = new Fruits($repositoryFruits);
-        $d->add($fileName, $name, $price);        
+        $d->add($name, $price);        
 
         break;
     
-    case "change":
-        print_r("change\n");
+    case "change":      
+        $params = $argv;  
+        checkParamsChangeOption($params);
+        
+        $fileName = $argv[1];
+        $path = dirname(__FILE__) . "/" . $fileName . ".txt";
+        $oldName = $argv[3];
+        $oldPrice = $argv[4];
+        $newName = $argv[5];
+        $newPrice = $argv[6];
+
+        $repositoryFruits = new RepositoryFruits($path);        
+        $d = new Fruits($repositoryFruits);
+        $d->change($oldName, $oldPrice, $newName, $newPrice);
         break;
     
     case "del":

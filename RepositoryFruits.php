@@ -5,9 +5,9 @@ namespace RepositoryFruits;
 
 interface IRepositoryFruits {
 
-    public function add(string $fileName, string $name, float $price);
-    public function change(string $name, int $price);
-    public function delete(string $name);
+    public function add(string $text);
+    public function change(string $oldText, string $newText);
+    public function delete(string $text);
 
 }
 
@@ -27,18 +27,26 @@ class RepositoryFruits implements IRepositoryFruits {
         return $this->path;
     }
 
-    public function add(string $fileName, string $name, float $price) {
-        $text = $name.' -- '.$price . PHP_EOL;        
-        $path = $this->path . '/' . $fileName . '.txt';        
-        file_put_contents($path, $text, FILE_APPEND);
+    public function add(string $text) {        
+        $res = file_put_contents($this->path, $text, FILE_APPEND);
+        return $res;
     }
 
-    public function change(string $name, int $price) {
-        
+    public function change(string $oldText, string $newText) {
+        $res = false;
+        $contentArray = file($this->path);        
+        $eleNum = array_search($oldText, $contentArray, true);        
+        if($eleNum !== false){            
+            $contentArray[$eleNum] = $newText;            
+            $res = file_put_contents($this->path, $contentArray);
+            return $res;
+        } else {
+            echo "\nЗапись не найден.\n";
+            return $res;
+        }        
     }
 
-    public function delete(string $name) {
-
+    public function delete(string $text) {
     }
     
 }
