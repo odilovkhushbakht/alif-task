@@ -4,6 +4,7 @@ require_once('RepositoryFruits.php');
 require_once('Fruits.php');
 require_once('ValidationAdd.php');
 require_once('ValidationChange.php');
+require_once('ValidationDelete.php');
 
 
 
@@ -12,6 +13,7 @@ use RepositoryFruits\IRepositoryFruits;
 use RepositoryFruits\RepositoryFruits;
 use ValidationAdd\ValidationAdd;
 use ValidationChange\ValidationChange;
+use ValidationDelete\ValidationDelete;
 
 
 switch ($argv[2]) {    
@@ -24,6 +26,7 @@ switch ($argv[2]) {
         $params['price'] = $argv[4];
         $validationAdd = new ValidationAdd($params);
         $validationAdd->checkParamsOption();
+
         if(count($validationAdd->getValidationData()) == 0) {            
             break;
         }
@@ -60,18 +63,26 @@ switch ($argv[2]) {
         $fruits->change($data['name'], $data['price'], $data['newname'], $data['newprice']);
         break;
     
-    case "del":        
-        $params = $argv;  
-        #checkParamsDeleteOption($params);
-        
-        $fileName = $argv[1];
-        $path = dirname(__FILE__) . "/" . $fileName . ".txt";        
-        $name = $argv[3];
-        $price = $argv[4];
+    case "del":                
+        $params = [];
+        $params['filename'] = $argv[1];
+        $params['option'] = $argv[2];
+        $params['name'] = $argv[3];
+        $params['price'] = $argv[4];
+        $validationDelete = new ValidationDelete($params);
+        $validationDelete->checkParamsOption();
 
+        if(count($validationDelete->getValidationData()) == 0) {            
+            break;
+        }
+        
+        $data = $validationDelete->getValidationData();
+        $path = dirname(__FILE__) . "/" . $data['filename'];
+        
         $repositoryFruits = new RepositoryFruits($path);        
-        $d = new Fruits($repositoryFruits);
-        $d->delete($name, $price);
+        $fruits = new Fruits($repositoryFruits);
+        $fruits->delete($data['name'], $data['price']);
+        
         break;
     
     default:
