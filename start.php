@@ -3,6 +3,7 @@
 require_once('RepositoryFruits.php');
 require_once('Fruits.php');
 require_once('ValidationAdd.php');
+require_once('ValidationChange.php');
 
 
 
@@ -10,51 +11,7 @@ use Fruits\Fruits;
 use RepositoryFruits\IRepositoryFruits;
 use RepositoryFruits\RepositoryFruits;
 use ValidationAdd\ValidationAdd;
-
-
-function checkParamsDeleteOption($params) {
-    return true;
-}
-
-function checkParamsChangeOption($params) {
-    return true;
-}
-
-function checkParamsAddOption($params) {
-    $res = false;
-    if(count($params) == 5) {
-        $res = true;
-    }
-    return $res;
-}
-
-function checkNameFile($fileName) {   
-    $res = false;
-    if(is_string($fileName)){        
-        $res = true;
-    }
-    return $res;
-}
-
-function checkFile($path) {
-    $res = false;    
-    if(file_exists($path)){
-        $res = true;
-    }
-    return $res;
-}
-
-function checkOldData() {
-    $res = false;
-    if(
-        !empty($argv[1]) and
-        isset($argv[1]) and
-        is_string($argv[1])
-    ){
-        $res = true;
-    }
-    return $res;
-}
+use ValidationChange\ValidationChange;
 
 
 switch ($argv[2]) {    
@@ -66,7 +23,7 @@ switch ($argv[2]) {
         $params['name'] = $argv[3];
         $params['price'] = $argv[4];
         $validationAdd = new ValidationAdd($params);
-        $validationAdd->checkParamsOptionAdd();
+        $validationAdd->checkParamsOption();
         if(count($validationAdd->getValidationData()) == 0) {            
             break;
         }
@@ -81,26 +38,31 @@ switch ($argv[2]) {
         break;
     
     case "change":      
-        $params = $argv;  
-        if(!checkParamsChangeOption($params)) {
+        $params = [];
+        $params['filename'] = $argv[1];
+        $params['option'] = $argv[2];
+        $params['name'] = $argv[3];
+        $params['price'] = $argv[4];
+        $params['newname'] = $argv[3];
+        $params['newprice'] = $argv[4];
+        $validationChange = new ValidationChange($params);
+        $validationChange->checkParamsOption();
+        
+        if(count($validationChange->getValidationData()) == 0) {            
             break;
         }
         
-        $fileName = $argv[1];
-        $path = dirname(__FILE__) . "/" . $fileName . ".txt";
-        $oldName = $argv[3];
-        $oldPrice = $argv[4];
-        $newName = $argv[5];
-        $newPrice = $argv[6];
-
+        $data = $validationChange->getValidationData();
+        $path = dirname(__FILE__) . "/" . $data['filename'];
+        
         $repositoryFruits = new RepositoryFruits($path);        
         $fruits = new Fruits($repositoryFruits);
-        $fruits->change($oldName, $oldPrice, $newName, $newPrice);
+        $fruits->change($data['name'], $data['price'], $data['newname'], $data['newprice']);
         break;
     
     case "del":        
         $params = $argv;  
-        checkParamsDeleteOption($params);
+        #checkParamsDeleteOption($params);
         
         $fileName = $argv[1];
         $path = dirname(__FILE__) . "/" . $fileName . ".txt";        

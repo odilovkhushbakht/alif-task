@@ -41,7 +41,7 @@ class Fruits implements FruitsActions {
         $newText = $this->textProcessing($newName, $newPrice);
         $res = $this->$repo->change($oldText, $newText);
         if($res) {
-            echo "\nЗапись успешно изменено в файле.\n";
+            echo "\nЗапись успешно изменено в файле.\n\n";
             return;
         }
         echo "\nЗапись не изменено в файле.\n\n";

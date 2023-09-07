@@ -27,9 +27,19 @@ class RepositoryFruits implements IRepositoryFruits {
         return $this->path;
     }
 
-    public function add(string $text) {        
-        $res = file_put_contents($this->path, $text, FILE_APPEND);
-        echo "\n\nПуть к файлу: " . $this->path . "\n\n";        
+    public function add(string $text) {
+        $res = false;
+        $contentArray = file($this->path);
+        $eleNum = array_search($text, $contentArray, true);        
+        
+        if($eleNum !== false) {
+            echo "\n\nЗапись существует.\n\n";
+            return $res;
+        } else {           
+            $res = file_put_contents($this->path, $text, FILE_APPEND);
+            echo "\n\nПуть к файлу: " . $this->path . "\n\n";                    
+        }
+        
         return $res;
     }
 

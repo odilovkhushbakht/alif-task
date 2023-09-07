@@ -3,17 +3,17 @@ namespace ValidationAdd;
 
 
 interface IValidationAdd {
-    public function checkParamsOptionAdd();
+    public function checkParamsOption();
     public function getValidationData();
 }
 
 class ValidationAdd implements IValidationAdd {
 
-    private $validationData = [];
-    private string $option;
-    private string $fileName;
-    private string $name;
-    private float $price;
+    protected $validationData = [];
+    protected string $option;
+    protected string $fileName;
+    protected string $name;
+    protected float $price;
 
     function __construct($params) {
         if(count($params) == 4) {            
@@ -26,7 +26,7 @@ class ValidationAdd implements IValidationAdd {
         }
     }
     
-    private function checkOption() {
+    protected function checkOption() {
         $res = false;    
         if(strcmp($this->option, strval("add")) === 0){
             $res = true;
@@ -34,7 +34,7 @@ class ValidationAdd implements IValidationAdd {
         return $res;
     }
 
-    private function checkFileName() {
+    protected function checkFileName() {
         $res = false;
         if(strlen($this->fileName) <= 10 and strlen($this->fileName) >= 4) {                        
             $this->fileName = preg_replace('/\W/', '', $this->fileName);                        
@@ -53,7 +53,7 @@ class ValidationAdd implements IValidationAdd {
         return $res;
     }
 
-    private function checkName() {
+    protected function checkName() {
         $res = false;    
         if(strlen($this->name) >= 3) {
             $this->validationData['name'] = $this->name;
@@ -62,26 +62,20 @@ class ValidationAdd implements IValidationAdd {
         return $res;
     }
     
-    private function checkPrice() {
+    protected function checkPrice() {
         $res = true;
         $this->validationData['price'] = floatval($this->price);        
         return $res;
     }
     
-    public function checkParamsOptionAdd() {
+    public function checkParamsOption() {
         $res = false;            
         $checkOption = $this->checkOption();                
         $checkFileName = $this->checkFileName();                        
-        $checkName = $this->checkName();        
-        $checkPrice = $this->checkPrice();                
+        $checkName = $this->checkName($this->name);        
+        $checkPrice = $this->checkPrice($this->price);                
         
-        if(
-            $checkOption and
-            $checkFileName and
-            $checkFile and
-            $checkName and
-            $checkPrice
-        ) {
+        if($checkOption && $checkFileName && $checkName && $checkPrice) {
             $res = true;
         } else {
             $this->validationData = [];
