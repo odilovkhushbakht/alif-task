@@ -29,6 +29,7 @@ class RepositoryFruits implements IRepositoryFruits {
 
     public function add(string $text) {        
         $res = file_put_contents($this->path, $text, FILE_APPEND);
+        echo "\n\nПуть к файлу: " . $this->path . "\n\n";        
         return $res;
     }
 

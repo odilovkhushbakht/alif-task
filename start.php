@@ -2,12 +2,14 @@
 
 require_once('RepositoryFruits.php');
 require_once('Fruits.php');
+require_once('ValidationAdd.php');
 
 
 
 use Fruits\Fruits;
 use RepositoryFruits\IRepositoryFruits;
 use RepositoryFruits\RepositoryFruits;
+use ValidationAdd\ValidationAdd;
 
 
 function checkParamsDeleteOption($params) {
@@ -54,23 +56,27 @@ function checkOldData() {
     return $res;
 }
 
-print_r($argv);
+
 switch ($argv[2]) {    
     
-    case "add":
-        $params = $argv;
-        if(!checkParamsAddOption($params)) {
+    case "add":        
+        $params = [];
+        $params['filename'] = $argv[1];
+        $params['option'] = $argv[2];
+        $params['name'] = $argv[3];
+        $params['price'] = $argv[4];
+        $validationAdd = new ValidationAdd($params);
+        $validationAdd->checkParamsOptionAdd();
+        if(count($validationAdd->getValidationData()) == 0) {            
             break;
         }
         
-        $fileName = $argv[1];
-        $path = dirname(__FILE__) . "/" . $fileName . ".txt";
-        $name = $argv[3];
-        $price = $argv[4];
+        $data = $validationAdd->getValidationData();                
+        $path = dirname(__FILE__) . "/" . $data['filename'];        
         
         $repositoryFruits = new RepositoryFruits($path);        
-        $d = new Fruits($repositoryFruits);
-        $d->add($name, $price);        
+        $fruits = new Fruits($repositoryFruits);
+        $fruits->add($data['name'], $data['price']);        
 
         break;
     
@@ -88,12 +94,11 @@ switch ($argv[2]) {
         $newPrice = $argv[6];
 
         $repositoryFruits = new RepositoryFruits($path);        
-        $d = new Fruits($repositoryFruits);
-        $d->change($oldName, $oldPrice, $newName, $newPrice);
+        $fruits = new Fruits($repositoryFruits);
+        $fruits->change($oldName, $oldPrice, $newName, $newPrice);
         break;
     
-    case "del":
-        print_r("\ndelete\n");
+    case "del":        
         $params = $argv;  
         checkParamsDeleteOption($params);
         
