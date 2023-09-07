@@ -31,6 +31,10 @@ class ValidationDelete extends ValidationAdd {
         $checkFile = $this->checkFile();                        
         $checkName = $this->checkName($this->name);        
         $checkPrice = $this->checkPrice($this->price);                
+
+        if(!$checkFile){
+            echo "\n\nФайл не найдено.\n\n";
+        }
         
         if($checkOption && $checkFile && $checkName && $checkPrice) {
             $res = true;

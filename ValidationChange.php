@@ -14,6 +14,7 @@ class ValidationChange extends ValidationAdd {
     function __construct($params) {        
         if(count($params) == 7) {            
             $this->option = $params[2];
+            $this->fileName = $params[1];
             $this->name = $params[3];
             $this->price = $params[4];
             $this->newName = $params[5];
@@ -63,8 +64,12 @@ class ValidationChange extends ValidationAdd {
         $checkNewName = $this->checkNewName();        
         $checkNewPrice = $this->checkNewPrice();        
         
+        if(!$checkFile){
+            echo "\n\nФайл не найдено.\n\n";
+        }
+
         if(
-            $checkOption and
+            $checkOption and            
             $checkFile and
             $checkName and
             $checkPrice and

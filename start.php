@@ -19,7 +19,11 @@ $path = $argv[1];
 
 switch ($argv[2]) {    
     
-    case "add":        
+    case "add":
+        if(count($argv) != 5){
+            echo "\n\nСправка:\n\n  add     добавить запись в файл \"«имя файла» add «наименование» «цена»\"\n\n";
+            break;
+        }
         $params = $argv;
         $validationAdd = new ValidationAdd($params);
         $validationAdd->checkParamsOption();
@@ -34,7 +38,11 @@ switch ($argv[2]) {
         $fruits->add($data['name'], $data['price']);
         break;
     
-    case "change":      
+    case "change":
+        if(count($argv) != 7){
+            echo "\n\nСправка:\n\n  change  изменить запись в файле \"«имя файла» change «старая наименование» «старая цена» «новая наименование» «новая цена»\"\n\n";
+            break;
+        }
         $params = $argv;
         $validationChange = new ValidationChange($params);
         $validationChange->checkParamsOption();
@@ -49,7 +57,11 @@ switch ($argv[2]) {
         $fruits->change($data['name'], $data['price'], $data['newname'], $data['newprice']);
         break;
     
-    case "del":                
+    case "del":
+        if(count($argv) != 5){
+            echo "\n\nСправка:\n\n  del     удалить запись из файла \"«имя файла» del «наименование» «цена»\"\n\n";
+            break;
+        }                
         $params = $argv;
         $validationDelete = new ValidationDelete($params);
         $validationDelete->checkParamsOption();
@@ -65,6 +77,10 @@ switch ($argv[2]) {
         break;
     
     case "total":
+        if(count($argv) != 3){
+            echo "\n\nСправка:\n\n  total   общая сумма \"«имя файла» total\"\n\n";
+            break;
+        }
         $params = [];
         $params['filename'] = $argv[1];
         $params['option'] = $argv[2];        
@@ -82,6 +98,7 @@ switch ($argv[2]) {
             add     добавить запись в файл "«имя файла» add «наименование» «цена»"
             change  изменить запись в файле "«имя файла» change «старая наименование» «старая цена» «новая наименование» «новая цена»"
             del     удалить запись из файла "«имя файла» del «наименование» «цена»"
+            total   общая сумма "«имя файла» total"
 
 
         EOD;

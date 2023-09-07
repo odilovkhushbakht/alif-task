@@ -30,10 +30,10 @@ class Fruits implements FruitsActions {
         $text = $this->textProcessing($name, $price);                    
         $res = $this->$repo->add($text);
         if($res) {
-            echo "\nЗапись успешно добавлено в файл.\n";
+            echo "\nЗапись успешно добавлено в файл.\n\n";
             return;
         }
-        echo "\nЗапись не добавлено в файл.\n";
+        echo "\nЗапись не добавлено в файл.\n\n";
     }
 
     public function change(string $oldName, float $oldPrice, string $newName, float $newPrice) {
