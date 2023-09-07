@@ -15,48 +15,34 @@ use ValidationAdd\ValidationAdd;
 use ValidationChange\ValidationChange;
 use ValidationDelete\ValidationDelete;
 
+$path = $argv[1];
 
 switch ($argv[2]) {    
     
     case "add":        
-        $params = [];
-        $params['filename'] = $argv[1];
-        $params['option'] = $argv[2];
-        $params['name'] = $argv[3];
-        $params['price'] = $argv[4];
+        $params = $argv;
         $validationAdd = new ValidationAdd($params);
         $validationAdd->checkParamsOption();
+        $data = $validationAdd->getValidationData();
 
-        if(count($validationAdd->getValidationData()) == 0) {            
+        if(count($data) == 0) {            
             break;
-        }
-        
-        $data = $validationAdd->getValidationData();                
-        $path = dirname(__FILE__) . "/" . $data['filename'];        
-        
+        }        
+                
         $repositoryFruits = new RepositoryFruits($path);        
         $fruits = new Fruits($repositoryFruits);
-        $fruits->add($data['name'], $data['price']);        
-
+        $fruits->add($data['name'], $data['price']);
         break;
     
     case "change":      
-        $params = [];
-        $params['filename'] = $argv[1];
-        $params['option'] = $argv[2];
-        $params['name'] = $argv[3];
-        $params['price'] = $argv[4];
-        $params['newname'] = $argv[3];
-        $params['newprice'] = $argv[4];
+        $params = $argv;
         $validationChange = new ValidationChange($params);
         $validationChange->checkParamsOption();
-        
-        if(count($validationChange->getValidationData()) == 0) {            
+        $data = $validationChange->getValidationData();        
+
+        if(count($data) == 0) {            
             break;
         }
-        
-        $data = $validationChange->getValidationData();
-        $path = dirname(__FILE__) . "/" . $data['filename'];
         
         $repositoryFruits = new RepositoryFruits($path);        
         $fruits = new Fruits($repositoryFruits);
@@ -64,29 +50,41 @@ switch ($argv[2]) {
         break;
     
     case "del":                
-        $params = [];
-        $params['filename'] = $argv[1];
-        $params['option'] = $argv[2];
-        $params['name'] = $argv[3];
-        $params['price'] = $argv[4];
+        $params = $argv;
         $validationDelete = new ValidationDelete($params);
         $validationDelete->checkParamsOption();
-
-        if(count($validationDelete->getValidationData()) == 0) {            
+        $data = $validationDelete->getValidationData();        
+        
+        if(count($data) == 0) {            
             break;
         }
         
-        $data = $validationDelete->getValidationData();
-        $path = dirname(__FILE__) . "/" . $data['filename'];
-        
         $repositoryFruits = new RepositoryFruits($path);        
         $fruits = new Fruits($repositoryFruits);
-        $fruits->delete($data['name'], $data['price']);
-        
+        $fruits->delete($data['name'], $data['price']);        
+        break;
+    
+    case "total":
+        $params = [];
+        $params['filename'] = $argv[1];
+        $params['option'] = $argv[2];        
+        $repositoryFruits = new RepositoryFruits($path);                
+        $fruits = new Fruits($repositoryFruits);
+        $total = $fruits->total();
+        echo "\n\nСумма: " . $total . "\n\n";
         break;
     
     default:
-        echo "\n\nСписок действии:\n\n  add добавить запись в файл  \"имяфайла add «Наименование» — «Цена»\"\n  change изменить запись в файле \"имяфайла change старая запись новая запись\"\n  del удалить запись из файла \"имяфайла del запись\"\n\n";
+        echo <<<'EOD'
+
+        Список действии:
+        
+            add     добавить запись в файл "«имя файла» add «наименование» «цена»"
+            change  изменить запись в файле "«имя файла» change «старая наименование» «старая цена» «новая наименование» «новая цена»"
+            del     удалить запись из файла "«имя файла» del «наименование» «цена»"
+
+
+        EOD;
         break;
 
 }

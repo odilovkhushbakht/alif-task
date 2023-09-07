@@ -19,7 +19,7 @@ class ValidationDelete extends ValidationAdd {
     
     protected function checkFile() {
         $res = false;       
-        if(file_exists($this->fileName . ".txt")){
+        if(file_exists($this->fileName)){
             $res = true;
         }
         return $res;
@@ -28,20 +28,18 @@ class ValidationDelete extends ValidationAdd {
     public function checkParamsOption() {
         $res = false;            
         $checkOption = $this->checkOption();                
-        $checkFileName = $this->checkFileName();                        
         $checkFile = $this->checkFile();                        
         $checkName = $this->checkName($this->name);        
         $checkPrice = $this->checkPrice($this->price);                
         
-        if($checkOption && $checkFileName && $checkFile && $checkName && $checkPrice) {
+        if($checkOption && $checkFile && $checkName && $checkPrice) {
             $res = true;
         } else {
             $this->validationData = [];
             echo "\n\nВалидация не пройдена.\n\n";
         }            
         
-        return $res;
-                
+        return $res;                
     }
 
 }

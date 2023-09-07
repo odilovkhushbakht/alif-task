@@ -11,14 +11,13 @@ class ValidationChange extends ValidationAdd {
     protected string $newName;
     protected float $newPrice;
 
-    function __construct($params) {
-        if(count($params) == 6) {            
-            $this->option = $params['option'];
-            $this->fileName = $params['filename'];
-            $this->name = $params['name'];
-            $this->price = $params['price'];
-            $this->newName = $params['newname'];
-            $this->newPrice = $params['newprice'];
+    function __construct($params) {        
+        if(count($params) == 7) {            
+            $this->option = $params[2];
+            $this->name = $params[3];
+            $this->price = $params[4];
+            $this->newName = $params[5];
+            $this->newPrice = $params[6];
         } else {
             echo "Параметры некорректный.";
         }
@@ -34,7 +33,7 @@ class ValidationChange extends ValidationAdd {
 
     protected function checkFile() {
         $res = false;       
-        if(file_exists($this->fileName . ".txt")){
+        if(file_exists($this->fileName)){
             $res = true;
         }
         return $res;
@@ -57,8 +56,7 @@ class ValidationChange extends ValidationAdd {
 
     public function checkParamsOption() {
         $res = false;                   
-        $checkOption = $this->checkOption();                
-        $checkFileName = $this->checkFileName();                        
+        $checkOption = $this->checkOption();                                        
         $checkFile = $this->checkFile(); 
         $checkName = $this->checkName();        
         $checkPrice = $this->checkPrice();        
@@ -67,7 +65,6 @@ class ValidationChange extends ValidationAdd {
         
         if(
             $checkOption and
-            $checkFileName and
             $checkFile and
             $checkName and
             $checkPrice and

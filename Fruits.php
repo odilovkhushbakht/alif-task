@@ -58,7 +58,23 @@ class Fruits implements FruitsActions {
     }
 
     public function total() {
+        $res = 0;
+        $contentArray = $this->$repo->all();
 
+        if(count($contentArray) == 0){
+            echo "\n\nФайл не найден или другие ошибки.\n\n";
+        }
+
+        foreach ($contentArray as $key => $value){            
+            if($key == 0) {
+                $value2 = explode(" -- ", $value);                
+                $res = trim($value2[1]);
+            } else {
+                $value2 = explode(" -- ", $value);                            
+                $res = bcadd($res, trim($value2[1]), 2);
+            }            
+        }
+        return $res;
     }
     
     private function textProcessing(string $name, float $price) {
