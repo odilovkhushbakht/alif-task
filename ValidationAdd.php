@@ -28,7 +28,7 @@ class ValidationAdd implements IValidationAdd {
     
     private function checkOption() {
         $res = false;    
-        if($this->option === 'change'){
+        if(strcmp($this->option, strval("add")) === 0){
             $res = true;
         }
         return $res;
@@ -53,14 +53,6 @@ class ValidationAdd implements IValidationAdd {
         return $res;
     }
 
-    private function checkFile() {        
-        $res = false;    
-        if(file_exists($this->fileName)){
-            $res = true;
-        }
-        return $res;
-    }
-
     private function checkName() {
         $res = false;    
         if(strlen($this->name) >= 3) {
@@ -71,18 +63,17 @@ class ValidationAdd implements IValidationAdd {
     }
     
     private function checkPrice() {
-        $res = false;
+        $res = true;
         $this->validationData['price'] = floatval($this->price);        
         return $res;
     }
     
     public function checkParamsOptionAdd() {
         $res = false;            
-        $checkOption = $this->checkOption();
-        $checkFileName = $this->checkFileName();
-        $checkFile = $this->checkFile();
-        $checkName = $this->checkName();
-        $checkPrice = $this->checkPrice();
+        $checkOption = $this->checkOption();                
+        $checkFileName = $this->checkFileName();                        
+        $checkName = $this->checkName();        
+        $checkPrice = $this->checkPrice();                
         
         if(
             $checkOption and
@@ -93,7 +84,7 @@ class ValidationAdd implements IValidationAdd {
         ) {
             $res = true;
         } else {
-            $this->$validationData = [];
+            $this->validationData = [];
             echo "\n\nВалидация не пройдена.\n\n";
         }            
         
